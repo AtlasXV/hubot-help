@@ -1,11 +1,11 @@
 {
-  "name": "hubot-help",
+  "name": "hubot-larkcard-help",
   "description": "A hubot script to show available hubot commands",
   "version": "0.0.0-development",
   "publishConfig": {
     "tag": "next"
   },
-  "author": "Josh Nichols <josh@technicalpickles.com>",
+  "author": "wenxi",
   "license": "MIT",
   "keywords": [
     "hubot",
@@ -16,10 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/hubotio/hubot-help.git"
-  },
-  "bugs": {
-    "url": "https://github.com/hubotio/hubot-help/issues"
+    "url": "https://github.com/AtlasXV/hubot-help.git"
   },
   "peerDependencies": {
     "hubot": ">=2 <10 || 0.0.0-development"
@@ -27,6 +24,7 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "coveralls": "^2.13.1",
+    "cz-conventional-changelog": "^3.2.0",
     "grunt": "^1.0.1",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-mocha-test": "^0.7.0",
@@ -52,5 +50,10 @@
   "files": [
     "index.js",
     "src"
-  ]
+  ],
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

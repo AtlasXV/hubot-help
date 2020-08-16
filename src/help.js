@@ -3,10 +3,6 @@
 // Description:
 //   Generates help commands for Hubot.
 //
-// Commands:
-//   hubot help - Displays all of the help commands that this bot knows about.
-//   hubot help <query> - Displays all help commands that match <query>.
-//
 // URLS:
 //   /hubot/help
 //
@@ -61,22 +57,67 @@ module.exports = (robot) => {
   robot.respond(/help(?:\s+(.*))?$/i, (msg) => {
     let cmds = getHelpCommands(robot)
     const filter = msg.match[1]
-
     if (filter) {
-      cmds = cmds.filter(cmd => cmd.match(new RegExp(filter, 'i')))
+      cmds = cmds.filter(cmd => cmd.match(new RegExp(`^${filter}`, 'i')))
       if (cmds.length === 0) {
         msg.send(`No available commands match ${filter}`)
         return
       }
+    } else {
+      cmds = cmds.filter(cmd => cmd.match(new RegExp('^hubot', 'i')))
+      if (cmds.length === 0) {
+        msg.send(`No available commands`)
+        return
+      }
     }
 
-    const emit = cmds.join('\n')
-
+    const cardBody = {
+      config: {
+        wide_screen_mode: true
+      },
+      header: {
+        title: {
+          tag: 'plain_text',
+          content: 'Bender Help'
+        }
+      },
+      elements: []
+    };
+    cmds.forEach((asGroup, idx) => {
+      const cmdParts = asGroup.split('-->');
+      cardBody.elements.push({
+        tag: 'div',
+        text: {
+          tag: 'lark_md',
+          content: `**${cmdParts[0].trim()}**`
+        },
+        fields: [{
+            is_short: false,
+            text: {
+              tag: 'plain_text',
+              content: cmdParts[1].trim()
+            }
+          }
+        ],
+      });
+      // if (idx != cmds.length - 1) {
+      //   cardBody.elements.push({
+      //     "tag": "hr"
+      //   });
+      // }
+    });
+    cardBody.elements.push({
+      tag: "note",
+      elements: [{
+        tag: "plain_text",
+        content: "help <cmd> 查看命令详情"
+      }]
+    });
     if (process.env.HUBOT_HELP_REPLY_IN_PRIVATE && msg.message && msg.message.user && msg.message.user.name && msg.message.user.name !== msg.message.room) {
       msg.reply('I just replied to you in private.')
-      return msg.sendPrivate(emit)
+      return msg.sendPrivate(cardBody)
     } else {
-      return msg.send(emit)
+      return msg.send(cardBody)
     }
   })
 
@@ -101,19 +142,9 @@ module.exports = (robot) => {
 var getHelpCommands = function getHelpCommands (robot) {
   let helpCommands = robot.helpCommands()
 
-  const robotName = robot.alias || robot.name
-
   if (hiddenCommandsPattern()) {
     helpCommands = helpCommands.filter(command => !hiddenCommandsPattern().test(command))
   }
-
-  helpCommands = helpCommands.map((command) => {
-    if (robotName.length === 1) {
-      return command.replace(/^hubot\s*/i, robotName)
-    }
-
-    return command.replace(/^hubot/i, robotName)
-  })
 
   return helpCommands.sort()
 }
