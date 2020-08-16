@@ -95,7 +95,7 @@ module.exports = (robot) => {
             is_short: false,
             text: {
               tag: 'plain_text',
-              content: cmdParts[1].trim()
+              content: cmdParts[1] ? cmdParts[1].trim() : "Empty"
             }
           }
         ],

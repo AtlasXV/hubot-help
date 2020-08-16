@@ -18,6 +18,7 @@ const newTestRobot = function newTestRobot () {
   const robot = new Robot(null, 'mock-adapter-v3', true, 'hubot')
 
   robot.loadFile(path.resolve('src/'), 'help.js')
+  robot.loadFile(path.resolve('test/'), 'help_cmd.js')
 
   robot.adapter.on('connected', () => robot.brain.userForId('1', {
     name: 'john',
@@ -41,7 +42,9 @@ describe('help', () => describe('getHelpCommands', () => {
 
   context('when HUBOT_HELP_HIDDEN_COMMANDS is not set', () => it('lists all commands', function (done) {
     this.robot.adapter.on('send', function (envelope, strings) {
-      const commands = strings[0].split('\n')
+      console.info('**********')
+      console.info(strings)
+      const commands = strings[0].elements
 
       expect(commands.length).to.eql(2)
       expect(commands).to.eql(this.robot.helpCommands())
@@ -55,7 +58,7 @@ describe('help', () => describe('getHelpCommands', () => {
   context('when HUBOT_HELP_HIDDEN_COMMANDS is set', () => it('lists all commands but those in environment variable', function (done) {
     process.env.HUBOT_HELP_HIDDEN_COMMANDS = 'help'
     this.robot.adapter.on('send', function (envelope, strings) {
-      const commands = strings[0].split('\n')
+      const commands = strings[0].elements
 
       expect(commands.length).to.eql(1)
       expect(commands[0]).to.match(/hubot help <query> - Displays all help commands that match <query>/)
