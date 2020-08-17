@@ -1,7 +1,7 @@
 {
   "name": "hubot-larkcard-help",
   "description": "A hubot script to show available hubot commands",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publishConfig": {
     "tag": "next"
   },

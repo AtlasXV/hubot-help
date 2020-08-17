@@ -42,8 +42,6 @@ describe('help', () => describe('getHelpCommands', () => {
 
   context('when HUBOT_HELP_HIDDEN_COMMANDS is not set', () => it('lists all commands', function (done) {
     this.robot.adapter.on('send', function (envelope, strings) {
-      console.info('**********')
-      console.info(strings)
       const commands = strings[0].elements
 
       expect(commands.length).to.eql(2)

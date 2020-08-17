@@ -57,19 +57,17 @@ module.exports = (robot) => {
           }
         }]
       })
-      // if (idx != cmds.length - 1) {
-      //   cardBody.elements.push({
-      //     "tag": "hr"
-      //   });
-      // }
     })
-    cardBody.elements.push({
-      tag: 'note',
-      elements: [{
-        tag: 'plain_text',
-        content: 'help <cmd> 查看命令详情'
-      }]
-    })
+    if(!filter){
+      cardBody.elements.push({
+        tag: 'note',
+        elements: [{
+          tag: 'plain_text',
+          content: 'help <cmd> 查看命令详情'
+        }]
+      })
+    }
+    
     if (process.env.HUBOT_HELP_REPLY_IN_PRIVATE && msg.message && msg.message.user && msg.message.user.name && msg.message.user.name !== msg.message.room) {
       msg.reply('I just replied to you in private.')
       return msg.sendPrivate(cardBody)
