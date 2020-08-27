@@ -22,7 +22,7 @@ module.exports = (robot) => {
         return
       }
     } else {
-      cmds = cmds.filter(cmd => cmd.match(new RegExp('^hubot', 'i')))
+      cmds = cmds.filter(cmd => cmd.match(new RegExp('^hubot', 'i'))).map(cmd => cmd.replace(/^hubot\s*/i, 'Bender'))
       if (cmds.length === 0) {
         msg.send(`No available commands`)
         return
